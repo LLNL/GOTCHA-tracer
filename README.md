@@ -1,6 +1,14 @@
 # GOTCHA Tracer
 
 This is a simple example for how to create a tracer using [GOTCHA](https://github.com/llnl/GOTCHA).
+It is also shows how a CMake project would integrate Gotcha.
+This includes testing Gotcha via direct invocation and using `LD_PRELOAD`.
+
+There are 3 steps to creating a tracer:
+
+1. The function protypes for the functions to trace are added in a `modules/<module-name>.txt` file.
+2. Through the functionality in `modules/translate.py`, the gotcha wrapers and wrapees for each module are generated.
+3. All genetared modules are linked into the main trace library (see `src/`).
 
 ## Contact/Legal
 
