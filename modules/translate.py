@@ -35,7 +35,16 @@ def read_functions_file(filename):
 	f.close()
 	return functions
 
+
 def write_gotcha_file(filename, func_list, modulename):
+        """static gotcha_wrappee_handle_t WRAP_Orig_Func_handle;
+static int (*WRAP_Orig_Func) (int param);
+static int dissectio_Orig_Func (int param){
+	printf("Orig_Func\n");
+        WRAP_Orig_Func = gotcha_get_wrappee(WRAP_Orig_Func_handle);
+        return WARP_Orig_Func ? (WRAP_Orig_Func(param) ) : 0;
+}
+"""
 	m = modulename.split('_')[0]
 	f = open(filename, 'w')
 	# write header
@@ -46,10 +55,11 @@ def write_gotcha_file(filename, func_list, modulename):
 	f.write("\n#define NFUNCS " + str(len(func_list)) + "\n\n")
 	# write each function wraper and wrapee
 	for function in func_list:
+                f.write("static gotcha_wrappee_handle_t " + function.wrapee + "_handle;\n")
 		f.write("static " + function.ret_type + " (*" + function.wrapee + ") (" + function.arg_string + ");\n")
 		f.write("static " + function.ret_type + " " + function.wraper + " (" + function.arg_string + "){\n")
-		f.write("\tprintf(\"" + function.name + "\\n\");\n")
-		f.write("\treturn " + function.wrapee + "(" + function.string_param_names + ");\n")
+                f.write("\t" + function.wrapee + " = gotcha_get_wrappee(" + function.wrapee  + "_handle);\n" )
+		f.write("\treturn " + function.wrapee + " ? (" + function.wrapee + "(" + function.string_param_names + ")) : 0;\n")
 		f.write("}\n\n")
 	f.write("\n")
 	# write map struct
