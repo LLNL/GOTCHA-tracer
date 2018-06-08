@@ -15,6 +15,7 @@ SET_TESTS_PROPERTIES(hello_ldload PROPERTIES ENVIRONMENT "LD_PRELOAD=../src/libt
 
 # SILO FILE TEST
 
+IF(GT_BUILD_SILO)
 ## augmented to call tracer
 ADD_EXECUTABLE(silo_test_aug silo_test_aug.c)
 TARGET_LINK_LIBRARIES(silo_test_aug tracer)
@@ -25,6 +26,7 @@ ADD_EXECUTABLE(silo_test silo_test.c)
 TARGET_LINK_LIBRARIES(silo_test ${SILO_LIBRARIES} m)
 ADD_TEST(NAME silo_ldload COMMAND ./silo_test)
 SET_TESTS_PROPERTIES(silo_ldload PROPERTIES ENVIRONMENT "LD_PRELOAD=../src/libtracer.so")
+ENDIF(GT_BUILD_SILO)
 
 # "make check"
 # prints output from the ctests to verify traces

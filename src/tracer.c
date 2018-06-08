@@ -5,7 +5,7 @@
 void tracer_init() {
     init_gotcha_mpi_init_final();
     init_gotcha_mpi_io();
-    init_gotcha_silo();
+    //    init_gotcha_silo();
 }
 
 __attribute__((constructor)) void construct_me(){

@@ -14,11 +14,17 @@ FUNCTION(GENERATE_MODULE module_name)
         SET(MODULE_LIBS ${MODULE_LIBS} PARENT_SCOPE)
 ENDFUNCTION(GENERATE_MODULE)
 
-LIST(APPEND modules
-        mpi_init_final
-        mpi_io
-        silo
-)
+IF(GT_BUILD_MPI_IF)
+  LIST(APPEND modules mpi_init_final)
+ENDIF(GT_BUILD_MPI_IF)
+
+IF(GT_BUILD_MPI_IO)
+  LIST(APPEND modules mpi_io)
+ENDIF(GT_BUILD_MPI_IO)
+
+IF(GT_BUILD_SILO)
+  LIST(APPEND modules silo)
+ENDIF(GT_BUILD_SILO)
 
 FOREACH(m IN ITEMS ${modules})
         GENERATE_MODULE(${m})
